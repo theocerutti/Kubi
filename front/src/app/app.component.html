@@ -1,0 +1,59 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="container">
+
+  <section class="center">
+    <h1>Welcome</h1>
+  </section>
+
+  <section>
+    <h2>Health</h2>
+    <code [innerHTML]="health | json_pretty_print" class="{{ healthy }}"></code>
+  </section>
+
+  <section>
+    <h2>Add products</h2>
+    <form class="center" (ngSubmit)="createProduct(createForm.form.value)" #createForm="ngForm">
+      <div class="input-field">
+        <input id="name" name="name" type="text" placeholder="Name" ngModel required>
+      </div>
+
+      <div class="input-field">
+        <textarea class="materialize-textarea" id="description" name="description" placeholder="Description" ngModel required>
+        </textarea>
+      </div>
+
+      <div class="input-field">
+        <input id="image" name="image" type="text" placeholder="Image path" [(ngModel)]="imagePath" required>
+        <button class="btn-small" type="button" (click)="getRandomImagePath()">Get random image</button>
+      </div>
+
+      <button class="btn" type="submit">Submit</button>
+      <br>
+      {{formError}}
+    </form>
+  </section>
+
+  <section>
+    <h2>Products</h2>
+
+    <form style="text-align: center;" (ngSubmit)="searchProducts(searchForm.form.value['query'])" #searchForm="ngForm">
+      <input id="query" name="query" type="text" placeholder="Keyword" ngModel (ngModelChange)="searchProducts(searchForm.form.value['query'])" required>
+    </form>
+
+    <div class="row">
+      <div class="col s12 m4" *ngFor="let product of products">
+        <article class="card">
+          <div class="card-image">
+            <img [src]="product['image']">
+            <span class="card-title">{{product['name']}}</span>
+            <a (click)="removeProduct(product['id'])" class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">delete</i></a>
+          </div>
+          <div class="card-content">
+            <p>{{product['description']}}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</div>
