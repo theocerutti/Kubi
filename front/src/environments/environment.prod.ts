@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api_endpoint: "/api",
+  api_endpoint: "http://api.minikube.com/api",
 };

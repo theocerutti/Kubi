@@ -10,13 +10,11 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
-
-CMD ["npm", "run", "build:prod"]
+RUN ["npm", "run", "build:prod"]
 
 FROM nginx:1.21.1-alpine
 
-COPY --from=build /app/dist/* /usr/share/nginx/html
+COPY --from=build /app/dist/front/* /usr/share/nginx/html/
 
 EXPOSE 80
 

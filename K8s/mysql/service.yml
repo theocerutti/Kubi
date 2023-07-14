@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus
+  name: mysql
 spec:
   selector:
-    app: prometheus
+    app: mysql
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 9090
+      targetPort: 3306
   type: ClusterIP

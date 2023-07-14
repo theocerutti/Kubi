@@ -5,19 +5,6 @@ metadata:
   labels:
     name: prometheus
 data:
-  prometheus.rules: |-
-    groups:
-      - seriesQuery: 'request_gauge'
-        resources:
-          overrides:
-            kubernetes_namespace:
-              resource: namespace
-            kubernetes_pod_name:
-              resource: pod
-        name:
-          matches: "^(.*)"
-          as: "${1}_per_second"
-        metricsQuery: (sum(rate(<<.Series>>{<<.LabelMatchers>>}[1m])) by (<<.GroupBy>>))
   prometheus.yml: |-
     global:
       scrape_interval: 5s
