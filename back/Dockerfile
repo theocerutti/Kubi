@@ -1,5 +1,17 @@
-FROM node:18-bullseye
-ADD . /var/app
-WORKDIR /var/app
-RUN npm install
-CMD ["npm", "start"]
+FROM php:7.4.33-zts-alpine3.16
+
+RUN apk add --no-cache \
+    linux-headers \
+    && docker-php-ext-install -j$(nproc) sockets
+
+WORKDIR /app
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY . .
+
+RUN composer install
+
+EXPOSE 8080
+
+CMD ["php", "artisan", "serve", "--port", "8080"]
