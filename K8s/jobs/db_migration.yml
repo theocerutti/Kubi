@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: database-migration-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: database-migration-job
+          image: backend:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - php
+            - artisan
+            - migrate
+      restartPolicy: Never

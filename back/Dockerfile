@@ -2,7 +2,7 @@ FROM php:7.4.33-zts-alpine3.16
 
 RUN apk add --no-cache \
     linux-headers \
-    && docker-php-ext-install -j$(nproc) sockets pdo_mysql pdo_pgsql
+    && docker-php-ext-install -j$(nproc) sockets pdo_mysql
 
 WORKDIR /app
 

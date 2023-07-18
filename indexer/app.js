@@ -8,7 +8,7 @@ const amqpUri = process.env['AMQP_URI']
 if (amqpUri == null)
     throw Error('Missing AMQP_URI environment variable.');
 const esUri = process.env['ELASTICSEARCH_URI']
-if (amqpUri == null)
+if (esUri == null)
     throw Error('Missing ELASTICSEARCH_URI environment variable.');
 
 
@@ -16,6 +16,10 @@ if (amqpUri == null)
 
 const esClient = new Client({
     node: esUri,
+    auth: {
+        username: process.env['ELASTICSEARCH_USER'],
+        password: process.env['ELASTICSEARCH_PASSWORD'],
+    },
     maxRetries: 5,
     requestTimeout: 5000,
     sniffOnStart: false,
@@ -28,7 +32,7 @@ const consumeCreated = async (channel, msg) => {
     try {
         const body = JSON.parse(msg['content'].toString());
         const product = body['product'];
-        
+
         await esClient.index({
             index: 'products',
             id: product['id'],

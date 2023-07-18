@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-search
+  labels:
+    app: elastic-search
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: elastic-search
+      labels:
+        app: elastic-search
+    spec:
+      containers:
+        - name: elastic-search
+          image: elasticsearch:8.8.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: network.host
+              value: 0.0.0.0
+            - name: http.host
+              value: 0.0.0.0
+            - name: xpack.security.enabled
+              value: "true"
+            - name: ELASTIC_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: elastic-search-password
+                    key: ELASTIC_PASSWORD
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: elastic-search-data
+          ports:
+            - containerPort: 9200
+              name: http
+            - containerPort: 9300
+              name: transport
+      restartPolicy: Always
+      initContainers:
+        - name: increase-vm-max-map
+          image: busybox
+          command: ["sysctl", "-w", "vm.max_map_count=262144"]
+          securityContext:
+            privileged: true
+        - name: increase-fd-ulimit
+          image: busybox
+          command: ["sh", "-c", "ulimit -n 65536"]
+          securityContext:
+            privileged: true
+      volumes:
+        - name: elastic-search-data
+          persistentVolumeClaim:
+            claimName: elastic-search-data
+  selector:
+    matchLabels:
+      app: elastic-search
