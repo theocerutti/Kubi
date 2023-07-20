@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-cors": "^0.11.3",
-        "bschmitt/laravel-amqp": "^2.0",
+        "bschmitt/laravel-amqp": "^2.0.12",
         "cviebrock/laravel-elasticsearch": "^4",
         "elasticsearch/elasticsearch": "^7.9",
         "fideloper/proxy": "^4.0",

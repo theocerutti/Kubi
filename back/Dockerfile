@@ -10,6 +10,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
+RUN composer update
 RUN composer install
 
 EXPOSE 8080

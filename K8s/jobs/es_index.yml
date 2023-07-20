@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: es-migration-job
+spec:
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      name: es-migration-job
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: wait-for-elasticearch
+          image: alpine
+          command:
+            [
+              "sh",
+              "-c",
+              "for i in $(seq 1 300); do nc -zvw1 elastic-search 9200 && exit 0 || sleep 3; done; exit 1",
+            ]
+      containers:
+        - name: es-migration-job
+          image: appropriate/curl
+          env:
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-search-password
+                  key: ELASTIC_PASSWORD
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Create index"
+              curl -v -k -u elastic:$ELASTICSEARCH_PASSWORD -X PUT "http://elastic-search:9200/products" -H "Content-Type: application/json" || true
+              echo "Create mappings"
+              curl -v -k -u elastic:$ELASTICSEARCH_PASSWORD -X PUT "http://elastic-search:9200/products/_mapping" -H "Content-Type: application/json" -d'
+              {
+                "properties": {
+                  "name": {
+                    "type": "text"
+                  },
+                  "description": {
+                    "type": "text"
+                  },
+                  "image": {
+                    "type": "text"
+                  }
+                }
+              }
+              '

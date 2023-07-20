@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: elastic-search
-          image: elasticsearch:8.8.1
+          image: elasticsearch:7.9.3
           imagePullPolicy: IfNotPresent
           env:
             - name: discovery.type
@@ -30,6 +30,8 @@ spec:
                   secretKeyRef:
                     name: elastic-search-password
                     key: ELASTIC_PASSWORD
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
               name: elastic-search-data

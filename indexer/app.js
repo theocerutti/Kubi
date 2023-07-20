@@ -1,4 +1,3 @@
-
 const amqp = require('amqplib/callback_api');
 const { Client } = require('@elastic/elasticsearch');
 
