@@ -3,11 +3,13 @@ kind: Job
 metadata:
   name: database-migration-job
 spec:
+  parallelism: 1
+  completions: 1
   template:
     spec:
       containers:
         - name: database-migration-job
-          image: backend:latest
+          image: theocerutti/kubi-back:latest
           imagePullPolicy: IfNotPresent
           args:
             - php

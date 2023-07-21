@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: indexer
-          image: indexer:latest
+          image: theocerutti/kubi-indexer:latest
           imagePullPolicy: IfNotPresent
           env:
             - name: ELASTICSEARCH_URI

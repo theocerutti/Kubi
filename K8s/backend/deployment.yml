@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: backend:latest
+          image: theocerutti/kubi-back:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
